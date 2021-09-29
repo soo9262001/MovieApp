@@ -10,6 +10,8 @@ import Moya
 
 enum UserService {
     case popular
+    case nowplaying
+    case upcoming
     case movieInfo(id: Int)
 }
 
@@ -25,6 +27,10 @@ extension UserService : TargetType {
         switch self {
         case .popular:
             return "/popular"
+        case .nowplaying:
+            return "/now_playing"
+        case .upcoming:
+            return "/upcoming"
         case .movieInfo(let id):
             return "\(id)"
         }
@@ -41,7 +47,7 @@ extension UserService : TargetType {
     
     var task: Task {
         switch self {
-        case .popular:
+        case .popular, .nowplaying, .upcoming:
             return .requestParameters(parameters: ["api_key" : R.KEYS.api_key], encoding: URLEncoding.queryString)
         case .movieInfo(let id):
             return .requestParameters(parameters: ["api_key" : R.KEYS.api_key, "movie_id" : "id"], encoding: URLEncoding.queryString)

@@ -10,22 +10,59 @@ import ProgressHUD
 
 class UserViewModel {
     fileprivate let service = UserDataService()
-    var movies = [MovieModel]()
+    var popularMovies = [MovieModel]()
+    var nowMovies = [MovieModel]()
+    var upMovies = [MovieModel]()
     var movieInfo : MovieModel?
     
     var message : String?
     
-    func getMovies(completion: @escaping((UserViewState) -> Void)) {
+    func getPopularMovies(completion: @escaping((UserViewState) -> Void)) {
         ProgressHUD.show()
-        service.requestMovie { (movieList, error) in
-            
+
+        service.requestMovie(source: .popular) { (movieList, error) in
+
             if let error = error {
                 self.message = error.localizedDescription
                 ProgressHUD.dismiss()
                 completion(.failure)
                 return
             }
-            self.movies = movieList
+            self.popularMovies = movieList
+            ProgressHUD.dismiss()
+            completion(.success)
+        }
+    }
+    
+    func getNowMovies(completion: @escaping((UserViewState) -> Void)) {
+        ProgressHUD.show()
+
+        service.requestMovie(source: .nowplaying) { (movieList, error) in
+
+            if let error = error {
+                self.message = error.localizedDescription
+                ProgressHUD.dismiss()
+                completion(.failure)
+                return
+            }
+            self.nowMovies = movieList
+            ProgressHUD.dismiss()
+            completion(.success)
+        }
+    }
+    
+    func getUpMovies(completion: @escaping((UserViewState) -> Void)) {
+        ProgressHUD.show()
+
+        service.requestMovie(source: .upcoming) { (movieList, error) in
+
+            if let error = error {
+                self.message = error.localizedDescription
+                ProgressHUD.dismiss()
+                completion(.failure)
+                return
+            }
+            self.upMovies = movieList
             ProgressHUD.dismiss()
             completion(.success)
         }
