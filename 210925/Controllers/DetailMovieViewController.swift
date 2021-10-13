@@ -14,12 +14,12 @@ class DetailMovieViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     
-    fileprivate var movie = UserViewModel()
+    fileprivate var movie = MovieViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpTableView()
-
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -49,6 +49,10 @@ class DetailMovieViewController: UIViewController {
         OperationQueue.main.addOperation {
             self.tableView.reloadData()
         }
+    }
+    
+    func setTitle() {
+        
     }
     
     @IBAction func backBtn(_ sender: UIBarButtonItem) {

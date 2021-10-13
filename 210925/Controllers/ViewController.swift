@@ -12,7 +12,7 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
     
-    fileprivate let movieViewModel = UserViewModel()
+    fileprivate let movieViewModel = MovieViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,42 +21,17 @@ class ViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         getMovieData()
-        nowMovieData()
-        upMovieData()
     }
 
     fileprivate func setUpTableView() {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(UINib(nibName: R.CELL.tableViewCell, bundle: nil), forCellReuseIdentifier: R.CELL.mainCellId)
+        tableView.register(UINib(nibName: "MainTableViewCell", bundle: nil), forCellReuseIdentifier: "mainTable")
     }
     
     fileprivate func getMovieData() {
-        movieViewModel.getPopularMovies { [self] state in
-            switch state {
-            case .success:
-                self.handleSuccessFetchUsers()
-            case .failure:
-                print(movieViewModel.message as Any)
-                break
-            }
-        }
-    }
-    
-    fileprivate func nowMovieData() {
-        movieViewModel.getNowMovies { [self] state in
-            switch state {
-            case .success:
-                self.handleSuccessFetchUsers()
-            case .failure:
-                print(movieViewModel.message as Any)
-                break
-            }
-        }
-    }
-    
-    fileprivate func upMovieData() {
-        movieViewModel.getUpMovies { [self] state in
+        movieViewModel.getMovies { [self] state in
             switch state {
             case .success:
                 self.handleSuccessFetchUsers()
@@ -94,9 +69,9 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
-            return movieViewModel.popularMovies.count
+            return 1
         }else if section == 1 {
-            return movieViewModel.nowMovies.count
+            return 1
         }else {
             return movieViewModel.upMovies.count
         }
@@ -106,30 +81,32 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         if indexPath.section == 0 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: R.CELL.mainCellId, for: indexPath) as! MovieTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "mainTable", for: indexPath) as! MainTableViewCell
             
-            let movie = movieViewModel.popularMovies[indexPath.row]
+            let movieViewModel = movieViewModel.popularMovies
             
-            cell.titleLabel.text = movie.title
-            cell.dateLabel.text = "출시일 : \(movie.date!)"
-    //        cell.overviewLabel.text = movie.overview
-            cell.imgView.kf.setImage(with: URL(string: R.URL.imgURL + "\(movie.img ?? "")"))
-            cell.RatingView.rating = Double(movie.average! / 2)
+            cell.config(with: movieViewModel)
             
             return cell
 
         }else if indexPath.section == 1 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: R.CELL.mainCellId, for: indexPath) as! MovieTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "mainTable", for: indexPath) as! MainTableViewCell
             
-            let movie = movieViewModel.nowMovies[indexPath.row]
+            let movieViewModel = movieViewModel.nowMovies
             
-            cell.titleLabel.text = movie.title
-            cell.dateLabel.text = "출시일 : \(movie.date!)"
-    //        cell.overviewLabel.text = movie.overview
-            cell.imgView.kf.setImage(with: URL(string: R.URL.imgURL + "\(movie.img ?? "")"))
-            cell.RatingView.rating = Double(movie.average! / 2)
+            cell.config(with: movieViewModel)
             
             return cell
+//            let cell = tableView.dequeueReusableCell(withIdentifier: R.CELL.mainCellId, for: indexPath) as! MovieTableViewCell
+//
+//            let movie = movieViewModel.nowMovies[indexPath.row]
+//
+//            cell.titleLabel.text = movie.title
+//            cell.dateLabel.text = "출시일 : \(movie.date!)"
+//            cell.imgView.kf.setImage(with: URL(string: R.URL.imgURL + "\(movie.img ?? "")"))
+//            cell.RatingView.rating = Double(movie.average! / 2)
+//
+//            return cell
 
         }else {
             let cell = tableView.dequeueReusableCell(withIdentifier: R.CELL.mainCellId, for: indexPath) as! MovieTableViewCell
@@ -138,7 +115,6 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
             
             cell.titleLabel.text = movie.title
             cell.dateLabel.text = "출시일 : \(movie.date!)"
-    //        cell.overviewLabel.text = movie.overview
             cell.imgView.kf.setImage(with: URL(string: R.URL.imgURL + "\(movie.img ?? "")"))
             cell.RatingView.rating = Double(movie.average! / 2)
             
@@ -148,7 +124,11 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 200.0
+        if indexPath.section == 2 {
+            return 200
+        }else {
+            return 410
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {

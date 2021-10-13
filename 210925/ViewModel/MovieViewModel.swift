@@ -8,7 +8,7 @@
 import Foundation
 import ProgressHUD
 
-class UserViewModel {
+class MovieViewModel {
     fileprivate let service = UserDataService()
     var popularMovies = [MovieModel]()
     var nowMovies = [MovieModel]()
@@ -17,9 +17,9 @@ class UserViewModel {
     
     var message : String?
     
-    func getPopularMovies(completion: @escaping((UserViewState) -> Void)) {
+    func getMovies(completion: @escaping((UserViewState) -> Void)) {
         ProgressHUD.show()
-
+        
         service.requestMovie(source: .popular) { (movieList, error) in
 
             if let error = error {
@@ -32,11 +32,7 @@ class UserViewModel {
             ProgressHUD.dismiss()
             completion(.success)
         }
-    }
-    
-    func getNowMovies(completion: @escaping((UserViewState) -> Void)) {
-        ProgressHUD.show()
-
+        
         service.requestMovie(source: .nowplaying) { (movieList, error) in
 
             if let error = error {
@@ -49,11 +45,7 @@ class UserViewModel {
             ProgressHUD.dismiss()
             completion(.success)
         }
-    }
-    
-    func getUpMovies(completion: @escaping((UserViewState) -> Void)) {
-        ProgressHUD.show()
-
+        
         service.requestMovie(source: .upcoming) { (movieList, error) in
 
             if let error = error {
@@ -67,6 +59,7 @@ class UserViewModel {
             completion(.success)
         }
     }
+
     
     func getMovieInfo(id: Int, completion: @escaping((UserViewState) -> Void)) {
         service.requestMovieInfo(id: id) {
