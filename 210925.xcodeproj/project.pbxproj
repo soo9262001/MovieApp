@@ -100,7 +100,7 @@
 				256AB60226FEF2B4006A33BD /* ViewModel */,
 				256AB60326FEF2DC006A33BD /* Cell */,
 				256AB5F726FEEC4E006A33BD /* Services */,
-				256AB60826FF4E71006A33BD /* Controllers */,
+				256AB60826FF4E71006A33BD /* Views */,
 				256AB5E526FEE7AB006A33BD /* Main.storyboard */,
 				256AB5E826FEE7B1006A33BD /* Assets.xcassets */,
 				256AB5EA26FEE7B1006A33BD /* LaunchScreen.storyboard */,
@@ -142,13 +142,13 @@
 			path = Cell;
 			sourceTree = "<group>";
 		};
-		256AB60826FF4E71006A33BD /* Controllers */ = {
+		256AB60826FF4E71006A33BD /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				256AB5E326FEE7AB006A33BD /* ViewController.swift */,
 				256AB60426FF058E006A33BD /* DetailMovieViewController.swift */,
 			);
-			path = Controllers;
+			path = Views;
 			sourceTree = "<group>";
 		};
 		777D82180F7849EE75A0CC3C /* Frameworks */ = {
